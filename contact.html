@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUNA — Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F4EF;
+    --bg-soft:#F0EBE3;
+    --bg-alt:#FDFAF4;
+    --text:#1A1712;
+    --text-dim:#5C5548;
+    --muted:#8C8476;
+    --accent:#D4A76A;
+    --accent-light:#F0D7B5;
+    --line: rgba(26,23,18,0.10);
+    --line-strong: rgba(26,23,18,0.18);
+
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--accent); color:#fff; }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:#C9C1B0; border-radius:6px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
+
+  a{ color:inherit; }
+
+  nav{
+    position:fixed; top:0; left:0; width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px clamp(20px,5vw,64px);
+    z-index:100;
+    transition:background .5s ease, padding .5s ease, border-color .5s ease, backdrop-filter .5s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(247,244,239,0.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    padding:16px clamp(20px,5vw,64px);
+    border-bottom:1px solid var(--line);
+  }
+  .wordmark{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:19px;
+    letter-spacing:0.06em;
+  }
+  .nav-right{ display:flex; align-items:center; gap:28px; }
+  .nav-links{ display:flex; gap:26px; font-size:13px; color:var(--text-dim); }
+  .nav-links a{ text-decoration:none; position:relative; }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px;
+    background:var(--accent); transition:width .35s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-links a:hover{ color:var(--text); }
+  .btn{
+    font-family:var(--sans);
+    font-size:13px; font-weight:500;
+    letter-spacing:0.02em;
+    color:#fff;
+    background:var(--accent);
+    border:1px solid var(--accent);
+    padding:11px 22px;
+    border-radius:2px;
+    cursor:pointer;
+    text-decoration:none;
+    position:relative;
+    overflow:hidden;
+    transition:color .35s ease, transform .2s ease;
+  }
+  .btn::before{
+    content:''; position:absolute; inset:0;
+    background:var(--accent-light);
+    transform:translateX(-102%);
+    transition:transform .4s cubic-bezier(.65,0,.35,1);
+    z-index:0;
+  }
+  .btn span{ position:relative; z-index:1; }
+  .btn:hover::before{ transform:translateX(0); }
+  .btn:hover{ transform:translateY(-1px); }
+
+  .hamburger-btn {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 200;
+  }
+  .hamburger-btn span {
+    width: 28px;
+    height: 2px;
+    background: var(--text);
+    transition: all 0.3s ease;
+  }
+  .hamburger-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+  .hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  .header{
+    padding-top:140px;
+    padding-bottom:80px;
+    text-align:center;
+  }
+  .header h1{
+    font-family:var(--serif);
+    font-size:clamp(40px,6vw,72px);
+    font-weight:400;
+    margin-bottom:16px;
+  }
+  .header p{
+    color:var(--text-dim);
+    max-width:600px;
+    margin:0 auto;
+    font-size:16px;
+    line-height:1.6;
+  }
+
+  .contact-container{
+    max-width:900px;
+    margin:0 auto;
+    padding:0 clamp(20px,6vw,80px) 120px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+  }
+  .contact-info h3{
+    font-family:var(--serif);
+    font-size:24px;
+    font-weight:400;
+    margin-bottom:20px;
+  }
+  .contact-info p{
+    color:var(--text-dim);
+    font-size:15px;
+    line-height:1.8;
+    margin-bottom:16px;
+  }
+  .contact-form{
+    background:var(--bg-alt);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:40px 30px;
+  }
+  .contact-form input,
+  .contact-form textarea{
+    width:100%;
+    padding:12px 14px;
+    margin-bottom:20px;
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    background:#fff;
+    font-family:var(--sans);
+    font-size:15px;
+    color:var(--text);
+    transition:border-color .3s ease;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  .contact-form textarea{
+    min-height:120px;
+    resize:vertical;
+  }
+  .contact-form label{
+    display:block;
+    font-size:13px;
+    font-weight:500;
+    margin-bottom:8px;
+    color:var(--text);
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:34px clamp(20px,6vw,80px) 40px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px;
+    font-size:12px; color:var(--muted);
+  }
+  footer a{ text-decoration:none; color:var(--muted); }
+  footer a:hover{ color:var(--accent); }
+  .footer-links{ display:flex; gap:22px; }
+
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    background: var(--accent);
+    padding: 8px 0;
+    position: relative;
+    z-index: 1000;
+  }
+  .marquee-content {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-content span {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .marquee-content span::after {
+    content: '•';
+    font-size: 8px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width:860px){
+    .nav-links{ 
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 70%;
+      height: 100vh;
+      background: var(--bg-alt);
+      flex-direction: column;
+      padding: 100px 40px;
+      gap: 30px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-left: 1px solid var(--line);
+    }
+    .nav-links.active {
+      transform: translateX(0);
+    }
+    .hamburger-btn {
+      display: flex;
+    }
+    .nav-right .btn {
+      display: none;
+    }
+    .contact-container{ grid-template-columns:1fr; }
+    footer{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="wordmark" style="text-decoration:none;">AUNA</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" style="color:var(--text);">Contact</a>
+    </div>
+    <a href="index.html#cta" class="btn"><span>Pre-order</span></a>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>Get in Touch</h1>
+  <p>Have questions about our watches or services? We'd love to hear from you.</p>
+</div>
+
+<div class="marquee">
+  <div class="marquee-content">
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+  </div>
+</div>
+
+<div class="contact-container">
+  <div class="contact-info">
+    <h3>Contact Information</h3>
+    <p><b>Email:</b> hello@auna.com</p>
+    <p><b>Phone:</b> +1 (555) 123-4567</p>
+    <p><b>Address:</b> 123 Watchmaker Avenue<br>Geneva, Switzerland</p>
+    <h3 style="margin-top:40px;">Business Hours</h3>
+    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM<br>Sunday: Closed</p>
+  </div>
+
+  <div class="contact-form">
+    <h3 style="font-family:var(--serif); font-size:24px; font-weight:400; margin-bottom:24px;">Send us a message</h3>
+    <form id="contactForm">
+      <label>Name</label>
+      <input type="text" name="name" required>
+      
+      <label>Email</label>
+      <input type="email" name="email" required>
+      
+      <label>Message</label>
+      <textarea name="message" required></textarea>
+      
+      <button type="submit" class="btn" style="width:100%;"><span>Send Message</span></button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div>© <span id="year"></span> AUNA Watch Co.</div>
+  <div class="footer-links">
+    <a href="collections.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#">Warranty</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+var nav = document.getElementById('nav');
+window.addEventListener('scroll', function(){
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navLinks = document.querySelector('.nav-links');
+
+hamburgerBtn.addEventListener('click', function() {
+  this.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  alert('Thank you for your message! We will get back to you soon.');
+  this.reset();
+});
+</script>
+</body>
+</html>

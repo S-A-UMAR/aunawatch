@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUNA — About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4EF;
+  --bg-soft: #F0EBE3;
+  --bg-alt: #FDFAF4;
+  --text: #1A1712;
+  --text-dim: #5C5548;
+  --muted: #8C8476;
+  --accent: #D4A76A;
+  --accent-light: #F0D7B5;
+  --line: rgba(26,23,18,0.10);
+  --line-strong: rgba(26,23,18,0.18);
+  --serif: 'Fraunces', serif;
+  --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent); color: #fff; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #C9C1B0; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+a { color: inherit; text-decoration: none; }
+
+nav {
+  position: fixed; top: 0; left: 0; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26px clamp(20px, 5vw, 64px);
+  z-index: 100;
+  transition: background .5s ease, padding .5s ease, border-color .5s ease, backdrop-filter .5s ease;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(247,244,239,0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  padding: 16px clamp(20px,5vw,64px);
+  border-bottom: 1px solid var(--line);
+}
+.wordmark {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: 0.06em;
+}
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-links { display: flex; gap: 26px; font-size: 13px; color: var(--text-dim); }
+.nav-links a { text-decoration: none; position: relative; }
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+  background: var(--accent); transition: width .35s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: var(--text); }
+.btn {
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 11px 22px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color .35s ease, transform .2s ease;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent-light);
+  transform: translateX(-102%);
+  transition: transform .4s cubic-bezier(.65,0,.35,1);
+  z-index: 0;
+}
+.btn span { position: relative; z-index: 1; }
+.btn:hover::before { transform: translateX(0); }
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost {
+  background: transparent; color: var(--text); border: 1px solid var(--line-strong);
+}
+.btn.ghost::before { background: var(--accent); }
+.btn.ghost:hover { color: #fff; }
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 200;
+}
+.hamburger-btn span {
+  width: 28px;
+  height: 2px;
+  background: var(--text);
+  transition: all 0.3s ease;
+}
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.header {
+  padding-top: 180px;
+  padding-bottom: 60px;
+  text-align: center;
+}
+.header h1 {
+  font-family: var(--serif);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.header p {
+  color: var(--text-dim);
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.story-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 clamp(20px,6vw,80px) 80px;
+}
+.story-section h2 {
+  font-family: var(--serif);
+  font-size: 36px;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+.story-section p {
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.values-section {
+  padding: 80px 0;
+  background: var(--bg-alt);
+}
+.values-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(20px,6vw,80px);
+}
+.values-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.values-title h3 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap: 40px;
+}
+.value-card {
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+}
+.value-card h4 {
+  font-family: var(--serif);
+  font-size: 24px;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+.value-card p {
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.milestones-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px clamp(20px,6vw,80px);
+}
+.milestones-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.milestones-title h3 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+}
+.timeline {
+  border-left: 2px solid var(--accent);
+  padding-left: 40px;
+  margin-left: 20px;
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 40px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute;
+  left: -51px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.timeline-year {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.timeline-item h4 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.timeline-item p {
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 34px clamp(20px,6vw,80px) 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap:14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+footer a:hover { color: var(--accent); }
+.footer-links { display: flex; gap:22px; }
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  background: var(--accent);
+  padding: 8px 0;
+  position: relative;
+  z-index: 1000;
+}
+.marquee-content {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+.marquee-content span {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.marquee-content span::after {
+  content: '•';
+  font-size: 8px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 860px) {
+  .nav-links { 
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70%;
+    height: 100vh;
+    background: var(--bg-alt);
+    flex-direction: column;
+    padding: 100px 40px;
+    gap: 30px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-left: 1px solid var(--line);
+  }
+  .nav-links.active {
+    transform: translateX(0);
+  }
+  .hamburger-btn {
+    display: flex;
+  }
+  .nav-right .btn {
+    display: none;
+  }
+  footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="wordmark" style="text-decoration: none;">AUNA</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="about.html" style="color: var(--text);">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="index.html#cta" class="btn"><span>Pre-order</span></a>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>Our Story</h1>
+  <p>AUNA was born from a passion for horology and a desire to create timepieces that stand the test of time — both in design and durability.</p>
+</div>
+
+<div class="marquee">
+  <div class="marquee-content">
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+  </div>
+</div>
+
+<section class="story-section">
+  <h2>Crafting Time, Honoring Tradition</h2>
+  <p>Founded in 2024, AUNA is dedicated to the art of watchmaking. We believe that a watch is more than just a tool for telling time — it's a companion for life's moments, big and small.</p>
+  <p>Every AUNA timepiece is meticulously crafted with attention to detail, using only the finest materials. From the cold-forged steel case to the hand-finished movement, each component is a testament to our commitment to quality.</p>
+</section>
+
+<section class="values-section">
+  <div class="values-container">
+    <div class="values-title">
+      <h3>Our Values</h3>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <h4>Quality First</h4>
+        <p>We never compromise on quality. Every watch is tested rigorously to ensure it meets our exacting standards before it leaves our workshop.</p>
+      </div>
+      <div class="value-card">
+        <h4>Timeless Design</h4>
+        <p>We create watches that look as good today as they will in 50 years. Simple, elegant, and built to withstand passing trends.</p>
+      </div>
+      <div class="value-card">
+        <h4>Sustainability</h4>
+        <p>We're committed to responsible sourcing and minimizing our environmental impact at every step of the process.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="milestones-section">
+  <div class="milestones-title">
+    <h3>Our Journey</h3>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2024</div>
+      <h4>The Beginning</h4>
+      <p>AUNA is founded with a simple mission: to create exceptional watches that stand the test of time.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2024</div>
+      <h4>No. 1 Collection</h4>
+      <p>We launch our debut collection — the AUNA No. 1. A classic, minimalist automatic watch designed for everyday wear.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2025</div>
+      <h4>Coming Soon</h4>
+      <p>Stay tuned for our next releases: The Diver and The Chronograph, expanding our collection with new complications and styles.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> AUNA Watch Co.</div>
+  <div class="footer-links">
+    <a href="collections.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#">Warranty</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', function() {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navLinks = document.querySelector('.nav-links');
+
+hamburgerBtn.addEventListener('click', function() {
+  this.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+</script>
+</body>
+</html>

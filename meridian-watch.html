@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERIDIAN — No. 1 Automatic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS — 60% dark neutral / 30% ivory / 10% brass ============ */
+  :root{
+    --bg:#121210;            /* 60% dominant */
+    --bg-soft:#17160F0F;
+    --bg-alt:#18170F;        /* slightly warmer panel, still counts within the 60% neutral field */
+    --ivory:#ECE6D6;         /* 30% secondary */
+    --ivory-dim:#B7AD99;
+    --muted:#7C7566;
+    --brass:#C6924F;         /* 10% accent */
+    --brass-light:#E4BC82;
+    --line: rgba(236,230,214,0.10);
+    --line-strong: rgba(236,230,214,0.18);
+
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  body{
+    background:var(--bg);
+    color:var(--ivory);
+    font-family:var(--sans);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--brass); color:var(--bg); }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:#2a281f; border-radius:6px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--brass); }
+
+  a{ color:inherit; }
+  :focus-visible{ outline:1.5px solid var(--brass); outline-offset:4px; }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--brass);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px; height:1px;
+    background:var(--brass);
+    display:inline-block;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:fixed; top:0; left:0; width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px clamp(20px,5vw,64px);
+    z-index:100;
+    transition:background .5s ease, padding .5s ease, border-color .5s ease, backdrop-filter .5s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(18,18,16,0.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    padding:16px clamp(20px,5vw,64px);
+    border-bottom:1px solid var(--line);
+  }
+  .wordmark{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:19px;
+    letter-spacing:0.06em;
+  }
+  .nav-right{ display:flex; align-items:center; gap:28px; }
+  .nav-time{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.1em;
+    color:var(--ivory-dim);
+    opacity:0;
+    transform:translateY(-4px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .nav-time.show{ opacity:1; transform:translateY(0); }
+  .nav-links{ display:flex; gap:26px; font-size:13px; color:var(--ivory-dim); }
+  .nav-links a{ text-decoration:none; position:relative; }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px;
+    background:var(--brass); transition:width .35s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-links a:hover{ color:var(--ivory); }
+  .btn{
+    font-family:var(--sans);
+    font-size:13px; font-weight:500;
+    letter-spacing:0.02em;
+    color:var(--bg);
+    background:var(--brass);
+    border:1px solid var(--brass);
+    padding:11px 22px;
+    border-radius:2px;
+    cursor:pointer;
+    text-decoration:none;
+    position:relative;
+    overflow:hidden;
+    transition:color .35s ease, transform .2s ease;
+  }
+  .btn::before{
+    content:''; position:absolute; inset:0;
+    background:var(--brass-light);
+    transform:translateX(-102%);
+    transition:transform .4s cubic-bezier(.65,0,.35,1);
+    z-index:0;
+  }
+  .btn span{ position:relative; z-index:1; }
+  .btn:hover::before{ transform:translateX(0); }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn:active{ transform:translateY(0); }
+  .btn.ghost{
+    background:transparent; color:var(--ivory); border:1px solid var(--line-strong);
+  }
+  .btn.ghost::before{ background:var(--ivory); }
+  .btn.ghost:hover{ color:var(--bg); }
+
+  /* ============ LAYOUT ============ */
+  section{
+    position:relative;
+    padding:0 clamp(20px,6vw,80px);
+    z-index:10;
+  }
+  .section-inner{
+    max-width:1280px; margin:0 auto;
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:140px 0;
+  }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .9s cubic-bezier(.2,.6,.2,1), transform .9s cubic-bezier(.2,.6,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal.d1{ transition-delay:.08s; }
+  .reveal.d2{ transition-delay:.16s; }
+  .reveal.d3{ transition-delay:.24s; }
+
+  /* ============ HERO ============ */
+  #hero .section-inner{ padding-top:120px; }
+  .hero-copy{ max-width:560px; }
+  .hero-copy h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(44px,7vw,84px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    margin:22px 0 26px;
+  }
+  .hero-copy h1 em{
+    font-style:italic; font-weight:500; color:var(--brass-light);
+  }
+  .hero-copy p{
+    font-size:16px; line-height:1.7; color:var(--ivory-dim);
+    max-width:440px; margin-bottom:36px;
+  }
+  .hero-actions{ display:flex; align-items:center; gap:22px; }
+  .scroll-cue{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.14em;
+    color:var(--muted); text-transform:uppercase;
+  }
+  .scroll-cue .line{
+    width:1px; height:34px; background:linear-gradient(var(--brass), transparent);
+    animation:pulseLine 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseLine{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
+
+  .hero-load{ animation:heroUp .9s cubic-bezier(.2,.6,.2,1) both; }
+  .hero-load.d1{ animation-delay:.12s; }
+  .hero-load.d2{ animation-delay:.24s; }
+  .hero-load.d3{ animation-delay:.36s; }
+  @keyframes heroUp{ from{opacity:0; transform:translateY(24px);} to{opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce){
+    .hero-load{ animation:none; opacity:1; transform:none; }
+  }
+
+  /* ============ CLOCK — the signature element ============ */
+  .clock-anchor{
+    position:fixed;
+    top:50%; left:50%;
+    width:min(46vw,420px);
+    aspect-ratio:1/1;
+    transform:translate(-50%,-50%);
+    z-index:5;
+    pointer-events:none;
+    will-change:transform;
+  }
+  .clock-anchor svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .clock-face{ fill:var(--bg-alt); stroke:var(--line-strong); stroke-width:1; }
+  .clock-glow{ fill:url(#faceGlow); }
+  .tick-major{ stroke:var(--brass); stroke-width:2.4; stroke-linecap:round; }
+  .tick-minor{ stroke:var(--ivory-dim); stroke-opacity:.35; stroke-width:1; stroke-linecap:round; }
+  .hand{ stroke-linecap:round; transform-origin:200px 200px; }
+  .hand-hour{ stroke:var(--ivory); stroke-width:6; }
+  .hand-minute{ stroke:var(--ivory); stroke-width:4; }
+  .hand-second{ stroke:var(--brass-light); stroke-width:1.6; }
+  .hand-cap{ fill:var(--brass); }
+  .dial-label{ font-family:var(--mono); fill:var(--ivory-dim); letter-spacing:2px; }
+  .dial-brand{ font-family:var(--serif); font-style:italic; fill:var(--ivory); }
+
+  .digital-readout{
+    max-width:440px;
+    margin-top:8px;
+    display:flex; align-items:baseline; gap:12px;
+    font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:.12em;
+  }
+  .digital-readout span.time{ color:var(--brass-light); font-size:14px; }
+
+  /* ============ MOVEMENT / MATERIALS shared text blocks ============ */
+  .text-block{ max-width:480px; }
+  .text-block.align-right{ margin-left:auto; text-align:left; }
+  .text-block h2{
+    font-family:var(--serif); font-weight:400; font-size:clamp(30px,4vw,46px);
+    line-height:1.12; margin:18px 0 20px;
+  }
+  .text-block p{ color:var(--ivory-dim); line-height:1.75; font-size:15.5px; margin-bottom:16px; }
+  .stat-row{ display:flex; gap:34px; margin-top:30px; flex-wrap:wrap; }
+  .stat{ font-family:var(--mono); }
+  .stat b{ display:block; font-size:22px; color:var(--ivory); font-weight:500; }
+  .stat span{ font-size:11px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+
+  #movement .section-inner{ align-items:flex-start; }
+  #materials .section-inner{ align-items:flex-end; }
+
+  /* ============ MATERIALS swatches ============ */
+  .material-preview{
+    height:3px; width:100%; max-width:480px; margin:26px 0 22px;
+    border-radius:2px; overflow:hidden;
+    background:linear-gradient(90deg,#9c9c9c,#e4e4e4,#9c9c9c);
+    transition:background .5s ease;
+  }
+  .swatches{ display:flex; gap:14px; margin-top:6px; flex-wrap:wrap; }
+  .swatch{
+    display:flex; align-items:center; gap:10px;
+    padding:9px 14px 9px 9px;
+    border:1px solid var(--line-strong);
+    border-radius:30px;
+    background:transparent;
+    color:var(--ivory-dim);
+    font-family:var(--sans); font-size:12.5px;
+    cursor:pointer;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .swatch .dot{ width:18px; height:18px; border-radius:50%; flex:none; }
+  .swatch:hover, .swatch.active{ border-color:var(--brass); color:var(--ivory); }
+  .swatch.active{ background:rgba(198,146,79,0.08); }
+
+  /* ============ PRECISION ============ */
+  #precision .section-inner{ align-items:center; text-align:center; }
+  #precision .eyebrow{ justify-content:center; }
+  #precision .eyebrow::before{ display:none; }
+  #precision h2{
+    font-family:var(--serif); font-weight:400; font-size:clamp(30px,4vw,46px);
+    margin:18px 0 56px; max-width:640px;
+  }
+  .spec-grid{
+    display:grid; grid-template-columns:repeat(3,minmax(140px,180px));
+    gap:38px 54px; justify-content:center;
+  }
+  .spec{ border-top:1px solid var(--line-strong); padding-top:14px; text-align:left; }
+  .spec b{ display:block; font-family:var(--mono); font-size:24px; color:var(--brass-light); font-weight:500; }
+  .spec span{ font-size:11.5px; color:var(--muted); letter-spacing:.06em; }
+
+  /* ============ CTA ============ */
+  #cta .section-inner{ align-items:center; text-align:center; padding-bottom:60px; }
+  #cta .eyebrow{ justify-content:center; }
+  #cta .eyebrow::before{ display:none; }
+  #cta h2{
+    font-family:var(--serif); font-weight:400; font-size:clamp(36px,6vw,64px);
+    line-height:1.06; margin:20px 0 18px; max-width:680px;
+  }
+  #cta p.price{ font-family:var(--mono); color:var(--ivory-dim); font-size:14px; margin-bottom:34px; letter-spacing:.04em; }
+  #cta p.price b{ color:var(--brass-light); font-size:16px; }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:34px clamp(20px,6vw,80px) 40px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px;
+    font-size:12px; color:var(--muted);
+    position:relative; z-index:10;
+  }
+  footer a{ text-decoration:none; color:var(--muted); }
+  footer a:hover{ color:var(--brass-light); }
+  .footer-links{ display:flex; gap:22px; }
+
+  /* ============ responsive ============ */
+  @media (max-width:860px){
+    .clock-anchor{ width:min(70vw,320px); }
+    #movement .section-inner, #materials .section-inner{ align-items:flex-start; }
+    .text-block.align-right{ margin-left:0; }
+    .spec-grid{ grid-template-columns:repeat(2,minmax(120px,1fr)); }
+    .nav-links{ display:none; }
+    footer{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wordmark">MERIDIAN</div>
+  <div class="nav-right">
+    <div class="nav-time" id="navTime">— : — : —  LOCAL</div>
+    <div class="nav-links">
+      <a href="#movement">Movement</a>
+      <a href="#materials">Materials</a>
+      <a href="#precision">Specification</a>
+    </div>
+    <a href="#cta" class="btn"><span>Pre-order</span></a>
+  </div>
+</nav>
+
+<!-- ============ SIGNATURE CLOCK — fixed, migrates with scroll, ticks in real time ============ -->
+<div class="clock-anchor" id="clockAnchor" aria-hidden="true">
+  <svg viewBox="0 0 400 400">
+    <defs>
+      <radialGradient id="faceGlow" cx="50%" cy="42%" r="70%">
+        <stop offset="0%" stop-color="#232014"/>
+        <stop offset="100%" stop-color="#18170f"/>
+      </radialGradient>
+    </defs>
+    <circle class="clock-glow" cx="200" cy="200" r="192"/>
+    <circle class="clock-face" cx="200" cy="200" r="188"/>
+    <g id="ticks"></g>
+    <text x="200" y="118" text-anchor="middle" class="dial-brand" font-size="15">Meridian</text>
+    <text x="200" y="292" text-anchor="middle" class="dial-label" font-size="9">AUTOMATIC · 21 JEWELS</text>
+    <line id="handHour" class="hand hand-hour" x1="200" y1="200" x2="200" y2="115"/>
+    <line id="handMinute" class="hand hand-minute" x1="200" y1="200" x2="200" y2="80"/>
+    <line id="handSecond" class="hand hand-second" x1="200" y1="222" x2="200" y2="65"/>
+    <circle class="hand-cap" cx="200" cy="200" r="6"/>
+  </svg>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="hero" data-cx="16" data-cy="-2" data-scale="1.12">
+  <div class="section-inner">
+    <div class="hero-copy">
+      <div class="eyebrow hero-load">Automatic · 40mm · Sapphire</div>
+      <h1 class="hero-load d1">Time,<br>worn <em>quietly</em>.</h1>
+      <p class="hero-load d2">An automatic watch built to disappear into your day, and reappear only when you look for it. No. 1 — Meridian's first collection.</p>
+      <div class="hero-actions hero-load d3">
+        <a href="#cta" class="btn"><span>Reserve yours</span></a>
+        <div class="scroll-cue"><div class="line"></div>Scroll</div>
+      </div>
+      <div class="digital-readout hero-load d3">
+        <span>YOUR TIME</span>
+        <span class="time" id="digitalTime">00:00:00</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MOVEMENT ============ -->
+<section id="movement" data-cx="36" data-cy="-30" data-scale="0.3">
+  <div class="section-inner">
+    <div class="text-block reveal" data-observe>
+      <div class="eyebrow">Inside</div>
+      <h2>A mechanism, not a mechanism for attention.</h2>
+      <p>The calibre inside No. 1 winds itself from the motion of your wrist. No battery, no charging cable, no app asking for a moment of your time — just a rotor turning quietly behind sapphire.</p>
+      <p>Every movement is regulated by hand over six days before it's allowed to leave the workshop, and finished with a côtes de Genève pattern visible through the exhibition caseback.</p>
+      <div class="stat-row">
+        <div class="stat"><b>42h</b><span>Power reserve</span></div>
+        <div class="stat"><b>28</b><span>Jewels</span></div>
+        <div class="stat"><b>4Hz</b><span>Beat rate</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATERIALS ============ -->
+<section id="materials" data-cx="-36" data-cy="18" data-scale="0.3">
+  <div class="section-inner">
+    <div class="text-block align-right reveal" data-observe>
+      <div class="eyebrow">Touch</div>
+      <h2>Steel that ages like it means to.</h2>
+      <p>The case is cold-forged from a single billet of 316L steel, then hand-brushed along its top face and polished along the bevel — the kind of contrast you feel before you see.</p>
+      <p>Choose the <span id="finishWord">steel bracelet</span> to match how you actually wear a watch, not how it photographs.</p>
+      <div class="material-preview" id="materialPreview"></div>
+      <div class="swatches">
+        <button class="swatch active" data-finish="steel bracelet" data-gradient="linear-gradient(90deg,#9c9c9c,#e4e4e4,#9c9c9c)">
+          <span class="dot" style="background:linear-gradient(135deg,#c9c9c9,#8a8a8a)"></span>Steel
+        </button>
+        <button class="swatch" data-finish="chestnut leather" data-gradient="linear-gradient(90deg,#5a3620,#8a5a34,#5a3620)">
+          <span class="dot" style="background:linear-gradient(135deg,#8a5a34,#3f2414)"></span>Leather
+        </button>
+        <button class="swatch" data-finish="charcoal rubber" data-gradient="linear-gradient(90deg,#2b2b2b,#4a4a4a,#2b2b2b)">
+          <span class="dot" style="background:linear-gradient(135deg,#4a4a4a,#1a1a1a)"></span>Rubber
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRECISION ============ -->
+<section id="precision" data-cx="0" data-cy="-6" data-scale="1.0">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-observe>Specification</div>
+    <h2 class="reveal" data-observe>The numbers, if you need them.</h2>
+    <div class="spec-grid reveal" data-observe>
+      <div class="spec"><b>40mm</b><span>Case diameter</span></div>
+      <div class="spec"><b>11.8mm</b><span>Case thickness</span></div>
+      <div class="spec"><b>100m</b><span>Water resistance</span></div>
+      <div class="spec"><b>±2s/day</b><span>Accuracy</span></div>
+      <div class="spec"><b>Sapphire</b><span>Front &amp; back crystal</span></div>
+      <div class="spec"><b>42h</b><span>Power reserve</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section id="cta" data-cx="0" data-cy="0" data-scale="1.15">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-observe>No. 1 — First collection</div>
+    <h2 class="reveal" data-observe>Own the moment<br>before it passes.</h2>
+    <p class="price reveal" data-observe>From <b>$1,240</b> · Ships October · Two-year movement warranty</p>
+    <a href="#" class="btn reveal" data-observe><span>Reserve yours — fully refundable</span></a>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> Meridian Watch Co.</div>
+  <div class="footer-links">
+    <a href="#">Care instructions</a>
+    <a href="#">Warranty</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- NAV background on scroll ---------- */
+  var nav = document.getElementById('nav');
+  var navTime = document.getElementById('navTime');
+
+  /* ---------- CLOCK HANDS: smooth continuous sweep ---------- */
+  var handHour = document.getElementById('handHour');
+  var handMinute = document.getElementById('handMinute');
+  var handSecond = document.getElementById('handSecond');
+  var digitalTime = document.getElementById('digitalTime');
+
+  function updateHands(){
+    var now = new Date();
+    var ms = now.getMilliseconds();
+    var s = now.getSeconds() + ms/1000;
+    var m = now.getMinutes() + s/60;
+    var h = (now.getHours() % 12) + m/60;
+
+    var secDeg = reduceMotion ? Math.floor(s) * 6 : s * 6;
+    var minDeg = m * 6;
+    var hourDeg = h * 30;
+
+    handSecond.style.transform = 'rotate(' + secDeg + 'deg)';
+    handMinute.style.transform = 'rotate(' + minDeg + 'deg)';
+    handHour.style.transform = 'rotate(' + hourDeg + 'deg)';
+
+    var hh = String(now.getHours()).padStart(2,'0');
+    var mm = String(now.getMinutes()).padStart(2,'0');
+    var ss = String(now.getSeconds()).padStart(2,'0');
+    var stamp = hh + ':' + mm + ':' + ss;
+    digitalTime.textContent = stamp;
+    navTime.textContent = stamp + '  LOCAL';
+  }
+
+  /* ---------- TICK MARKS ---------- */
+  (function buildTicks(){
+    var g = document.getElementById('ticks');
+    var cx = 200, cy = 200, rOuter = 188;
+    var frag = document.createDocumentFragment();
+    for(var i=0;i<60;i++){
+      var angle = (i * 6) * Math.PI/180;
+      var isMajor = i % 5 === 0;
+      var rInner = isMajor ? rOuter - 20 : rOuter - 10;
+      var x1 = cx + rInner * Math.sin(angle);
+      var y1 = cy - rInner * Math.cos(angle);
+      var x2 = cx + rOuter * Math.sin(angle);
+      var y2 = cy - rOuter * Math.cos(angle);
+      var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', x1.toFixed(2));
+      line.setAttribute('y1', y1.toFixed(2));
+      line.setAttribute('x2', x2.toFixed(2));
+      line.setAttribute('y2', y2.toFixed(2));
+      line.setAttribute('class', isMajor ? 'tick-major' : 'tick-minor');
+      frag.appendChild(line);
+    }
+    g.appendChild(frag);
+  })();
+
+  /* ---------- CLOCK SCROLL CHOREOGRAPHY (the signature motion) ---------- */
+  var clockAnchor = document.getElementById('clockAnchor');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-cx]'));
+  var stops = [];
+  var isMobile = window.innerWidth <= 860;
+
+  function readStops(){
+    stops = sections.map(function(el){
+      var rect = el.getBoundingClientRect();
+      var top = rect.top + window.scrollY;
+      var center = top + el.offsetHeight/2;
+      var xFactor = isMobile ? 0.35 : 1;
+      return {
+        activation: center - window.innerHeight/2,
+        x: parseFloat(el.dataset.cx) * xFactor,
+        y: parseFloat(el.dataset.cy),
+        scale: parseFloat(el.dataset.scale) * (isMobile ? 0.85 : 1)
+      };
+    });
+  }
+
+  function lerp(a,b,t){ return a + (b-a)*t; }
+
+  function positionClock(){
+    if(!stops.length) return;
+    var y = window.scrollY + window.innerHeight/2;
+    var lo = stops[0], hi = stops[stops.length-1];
+    for(var i=0;i<stops.length-1;i++){
+      if(y >= stops[i].activation && y <= stops[i+1].activation){
+        lo = stops[i]; hi = stops[i+1]; break;
+      }
+    }
+    if(y <= stops[0].activation){ lo = hi = stops[0]; }
+    if(y >= stops[stops.length-1].activation){ lo = hi = stops[stops.length-1]; }
+
+    var span = hi.activation - lo.activation;
+    var t = span > 0 ? Math.min(1, Math.max(0, (y - lo.activation) / span)) : 0;
+
+    var x = lerp(lo.x, hi.x, t);
+    var yOff = lerp(lo.y, hi.y, t);
+    var scale = lerp(lo.scale, hi.scale, t);
+
+    clockAnchor.style.transform =
+      'translate(-50%,-50%) translate(' + x + 'vw,' + yOff + 'vh) scale(' + scale + ')';
+  }
+
+  var ticking = false;
+  function onScroll(){
+    if(!ticking){
+      window.requestAnimationFrame(function(){
+        positionClock();
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+        navTime.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', function(){
+    isMobile = window.innerWidth <= 860;
+    readStops();
+    positionClock();
+  });
+
+  readStops();
+  positionClock();
+
+  /* ---------- hands: smooth rAF sweep unless reduced motion ---------- */
+  if(reduceMotion){
+    updateHands();
+    setInterval(updateHands, 1000);
+  } else {
+    (function tick(){ updateHands(); requestAnimationFrame(tick); })();
+  }
+
+  /* ---------- SCROLL REVEALS ---------- */
+  var observed = document.querySelectorAll('[data-observe]');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.2});
+    observed.forEach(function(el){ io.observe(el); });
+  } else {
+    observed.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- MATERIAL SWATCHES ---------- */
+  var swatches = document.querySelectorAll('.swatch');
+  var preview = document.getElementById('materialPreview');
+  var finishWord = document.getElementById('finishWord');
+  swatches.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      swatches.forEach(function(s){ s.classList.remove('active'); });
+      btn.classList.add('active');
+      preview.style.background = btn.dataset.gradient;
+      finishWord.style.opacity = 0;
+      setTimeout(function(){
+        finishWord.textContent = btn.dataset.finish;
+        finishWord.style.opacity = 1;
+      }, 180);
+    });
+  });
+  finishWord.style.transition = 'opacity .2s ease';
+})();
+</script>
+</body>
+</html>

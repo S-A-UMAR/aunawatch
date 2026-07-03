@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUNA — Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4EF;
+  --bg-soft: #F0EBE3;
+  --bg-alt: #FDFAF4;
+  --text: #1A1712;
+  --text-dim: #5C5548;
+  --muted: #8C8476;
+  --accent: #D4A76A;
+  --accent-light: #F0D7B5;
+  --line: rgba(26,23,18,0.10);
+  --line-strong: rgba(26,23,18,0.18);
+  --serif: 'Fraunces', serif;
+  --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent); color: #fff; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #C9C1B0; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+a { color: inherit; text-decoration: none; }
+
+nav {
+  position: fixed; top: 0; left: 0; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26px clamp(20px, 5vw, 64px);
+  z-index: 100;
+  transition: background .5s ease, padding .5s ease, border-color .5s ease, backdrop-filter .5s ease;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(247,244,239,0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  padding: 16px clamp(20px,5vw,64px);
+  border-bottom: 1px solid var(--line);
+}
+.wordmark {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: 0.06em;
+}
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-links { display: flex; gap: 26px; font-size: 13px; color: var(--text-dim); }
+.nav-links a { text-decoration: none; position: relative; }
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+  background: var(--accent); transition: width .35s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: var(--text); }
+.btn {
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 11px 22px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color .35s ease, transform .2s ease;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent-light);
+  transform: translateX(-102%);
+  transition: transform .4s cubic-bezier(.65,0,.35,1);
+  z-index: 0;
+}
+.btn span { position: relative; z-index: 1; }
+.btn:hover::before { transform: translateX(0); }
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost {
+  background: transparent; color: var(--text); border: 1px solid var(--line-strong);
+}
+.btn.ghost::before { background: var(--accent); }
+.btn.ghost:hover { color: #fff; }
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 200;
+}
+.hamburger-btn span {
+  width: 28px;
+  height: 2px;
+  background: var(--text);
+  transition: all 0.3s ease;
+}
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.header {
+  padding-top: 180px;
+  padding-bottom: 60px;
+  text-align: center;
+}
+.header h1 {
+  font-family: var(--serif);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.header p {
+  color: var(--text-dim);
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.collections-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 6vw, 80px) 120px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 40px;
+}
+.collection-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 50px 40px;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.collection-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+}
+.collection-card .eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.collection-card h3 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.collection-card p {
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.spec-list {
+  margin-bottom: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 16px;
+  border-right: 1px solid var(--line);
+}
+.spec-item:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+.spec-item strong {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--text);
+}
+.spec-item span {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.price-tag {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.price-tag b {
+  font-size: 20px;
+  color: var(--accent);
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 34px clamp(20px, 6vw, 80px) 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+footer a:hover { color: var(--accent); }
+.footer-links { display: flex; gap: 22px; }
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  background: var(--accent);
+  padding: 8px 0;
+  position: relative;
+  z-index: 1000;
+}
+.marquee-content {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+.marquee-content span {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.marquee-content span::after {
+  content: '•';
+  font-size: 8px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 860px) {
+  .nav-links { 
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70%;
+    height: 100vh;
+    background: var(--bg-alt);
+    flex-direction: column;
+    padding: 100px 40px;
+    gap: 30px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-left: 1px solid var(--line);
+  }
+  .nav-links.active {
+    transform: translateX(0);
+  }
+  .hamburger-btn {
+    display: flex;
+  }
+  .nav-right .btn {
+    display: none;
+  }
+  footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="wordmark" style="text-decoration: none;">AUNA</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="collections.html" style="color: var(--text);">Collections</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="index.html#cta" class="btn"><span>Pre-order</span></a>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>Our Collections</h1>
+  <p>Discover the AUNA collection — where timeless design meets exceptional craftsmanship. Each watch is built to last a lifetime.</p>
+</div>
+
+<div class="marquee">
+  <div class="marquee-content">
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+    <span>Swiss-inspired precision</span>
+    <span>100m water resistant</span>
+    <span>Self-winding movement</span>
+    <span>Sapphire crystal</span>
+    <span>2-year warranty</span>
+    <span>Free worldwide shipping</span>
+  </div>
+</div>
+
+<div class="collections-grid">
+  <div class="collection-card">
+    <div class="eyebrow">
+      <span style="width:22px;height:1px;background:var(--accent);display:inline-block;"></span>
+      No. 1
+    </div>
+    <h3>The Classic</h3>
+    <p>Our debut collection. A clean, minimalist design with 40mm case, automatic movement, and sapphire crystal front and back.</p>
+    <div class="spec-list">
+      <div class="spec-item"><strong>40mm</strong><span>Case</span></div>
+      <div class="spec-item"><strong>100m</strong><span>WR</span></div>
+      <div class="spec-item"><strong>42h</strong><span>Reserve</span></div>
+    </div>
+    <div class="price-tag">From <b>$1,240</b></div>
+    <a href="index.html#cta" class="btn"><span>Reserve Yours</span></a>
+  </div>
+
+  <div class="collection-card">
+    <div class="eyebrow">
+      <span style="width:22px;height:1px;background:var(--accent);display:inline-block;"></span>
+      No. 2
+    </div>
+    <h3>The Diver</h3>
+    <p>Built for adventure. 42mm robust case, 200m water resistance, and luminous dial for perfect low-light visibility.</p>
+    <div class="spec-list">
+      <div class="spec-item"><strong>42mm</strong><span>Case</span></div>
+      <div class="spec-item"><strong>200m</strong><span>WR</span></div>
+      <div class="spec-item"><strong>72h</strong><span>Reserve</span></div>
+    </div>
+    <div class="price-tag">From <b>$1,580</b> · Coming soon</div>
+    <button class="btn ghost"><span>Notify Me</span></button>
+  </div>
+
+  <div class="collection-card">
+    <div class="eyebrow">
+      <span style="width:22px;height:1px;background:var(--accent);display:inline-block;"></span>
+      No. 3
+    </div>
+    <h3>The Chronograph</h3>
+    <p>Precision timing meets elegant design. 41mm case with chronograph complication, perfect for any occasion.</p>
+    <div class="spec-list">
+      <div class="spec-item"><strong>41mm</strong><span>Case</span></div>
+      <div class="spec-item"><strong>100m</strong><span>WR</span></div>
+      <div class="spec-item"><strong>60h</strong><span>Reserve</span></div>
+    </div>
+    <div class="price-tag">From <b>$1,890</b> · Coming soon</div>
+    <button class="btn ghost"><span>Notify Me</span></button>
+  </div>
+</div>
+
+<footer>
+  <div>© <span id="year"></span> AUNA Watch Co.</div>
+  <div class="footer-links">
+    <a href="collections.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#">Warranty</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', function() {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navLinks = document.querySelector('.nav-links');
+
+hamburgerBtn.addEventListener('click', function() {
+  this.classList.toggle('active');
+  navLinks.classList.toggle('active');
+});
+</script>
+</body>
+</html>
