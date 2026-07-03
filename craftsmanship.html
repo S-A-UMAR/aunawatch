@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUNA Craftsmanship — The Art of Watchmaking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAF8;
+      --bg-soft: #F3F0EB;
+      --bg-alt: #FFFFFF;
+      --text: #0F0D0A;
+      --text-dim: #4A4641;
+      --muted: #8B8278;
+      --accent: #C4956A;
+      --accent-light: #E8D4C0;
+      --accent-dark: #8B6F47;
+      --line: rgba(15,13,10,0.06);
+      --line-strong: rgba(15,13,10,0.12);
+      --serif: 'Fraunces', serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--accent); color: #fff; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #C9C1B0; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    a { color: inherit; text-decoration: none; transition: color .3s cubic-bezier(.2, .6, .2, 1); }
+    :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 4px; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px clamp(20px, 5vw, 64px);
+      z-index: 100;
+      transition: all .5s cubic-bezier(.2, .6, .2, 1);
+      border-bottom: 1px solid transparent;
+      background: rgba(250, 250, 248, 0.3);
+      backdrop-filter: blur(0px);
+    }
+    nav.scrolled {
+      background: rgba(250, 250, 248, 0.85);
+      backdrop-filter: blur(16px) saturate(150%);
+      padding: 18px clamp(20px, 5vw, 64px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .wordmark { font-family: var(--serif); font-weight: 500; font-size: 19px; letter-spacing: 0.06em; }
+    .nav-right { display: flex; align-items: center; gap: 28px; }
+    .nav-links { display: flex; gap: 26px; font-size: 13px; color: var(--text-dim); }
+    .nav-links a { text-decoration: none; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px; background: var(--accent); transition: width .35s ease; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
+      font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: #fff;
+      background: var(--accent); border: 1.5px solid var(--accent); padding: 12px 28px; border-radius: 6px;
+      cursor: pointer; text-decoration: none; position: relative; overflow: hidden;
+      transition: all .35s cubic-bezier(.2, .6, .2, 1); display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn::before { content: ''; position: absolute; inset: 0; background: var(--accent-dark);
+      transform: translateX(-102%); transition: transform .4s cubic-bezier(.65, 0, .35, 1); z-index: 0; }
+    .btn span { position: relative; z-index: 1; }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(196, 149, 106, 0.25); }
+
+    section { position: relative; padding: 0 clamp(20px, 6vw, 80px); z-index: 10; }
+    .section-inner { max-width: 1280px; margin: 0 auto; min-height: 100vh; display: flex;
+      flex-direction: column; justify-content: center; padding: 160px 0; }
+
+    .hero-section { padding-top: 180px; padding-bottom: 100px; }
+    .hero-section h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(52px, 8vw, 100px);
+      line-height: 1.08; letter-spacing: -0.015em; margin-bottom: 24px; text-balance: pretty; }
+    .hero-section p { font-size: 18px; line-height: 1.75; color: var(--text-dim); max-width: 600px; }
+
+    .process-section { padding: 100px 0; background: var(--bg-alt); }
+    .process-grid { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 80px);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px; }
+
+    .process-card {
+      padding: 50px 40px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg);
+      transition: all .4s cubic-bezier(.2, .6, .2, 1); position: relative;
+    }
+    .process-card:hover { border-color: var(--accent); box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+      transform: translateY(-6px); }
+
+    .process-number { font-family: var(--mono); font-size: 32px; color: var(--accent); font-weight: 600;
+      margin-bottom: 12px; }
+    .process-card h3 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+    .process-card p { color: var(--text-dim); line-height: 1.7; }
+
+    .materials-section { padding: 100px 0; }
+    .materials-grid { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 80px);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+
+    .material-item { padding: 40px; border: 1px solid var(--line); border-radius: 12px;
+      transition: all .3s ease; }
+    .material-item:hover { border-color: var(--accent); background: var(--bg-alt); }
+
+    .material-icon { font-size: 40px; margin-bottom: 16px; }
+    .material-item h4 { font-family: var(--serif); font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+    .material-item p { font-size: 14px; color: var(--muted); }
+
+    .reveal { opacity: 0; transform: translateY(32px);
+      transition: opacity 1s cubic-bezier(.2, .6, .2, 1), transform 1s cubic-bezier(.2, .6, .2, 1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    footer { border-top: 1px solid var(--line); padding: 48px clamp(20px, 6vw, 80px) 54px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+      gap: 16px; font-size: 13px; color: var(--muted); background: var(--bg-alt); }
+    footer a { transition: color .3s ease; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 28px; }
+
+    .hamburger-btn { display: none; flex-direction: column; gap: 6px; background: transparent; border: none;
+      cursor: pointer; padding: 8px; z-index: 200; }
+    .hamburger-btn span { width: 28px; height: 2px; background: var(--text); transition: all 0.3s ease; }
+    .hamburger-btn.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+    .hamburger-btn.active span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        position: fixed; top: 0; right: 0; width: 75%; height: 100vh; background: var(--bg);
+        flex-direction: column; padding: 100px 40px; gap: 36px; transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(.2, .6, .2, 1); border-left: 1px solid var(--line); z-index: 150;
+      }
+      .nav-links.active { transform: translateX(0); }
+      .hamburger-btn { display: flex; }
+      .btn { display: none; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <a href="index.html" class="wordmark">AUNA</a>
+    <div class="nav-right">
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="collections.html">Collections</a>
+        <a href="heritage.html">Heritage</a>
+        <a href="craftsmanship.html">Craftsmanship</a>
+        <a href="technology.html">Technology</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger-btn" id="hamburger"><span></span><span></span><span></span></button>
+      <a href="collections.html" class="btn preorder-btn"><span>Shop</span></a>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="section-inner">
+      <h1 class="reveal" data-observe="">The Art of Creation</h1>
+      <p class="reveal" data-observe="">Each AUNA watch is a masterpiece born from decades of expertise, refined techniques, and an obsessive attention to detail. We don't just make watches—we craft heirlooms.</p>
+    </div>
+  </section>
+
+  <section class="process-section">
+    <h2 style="text-align: center; font-family: var(--serif); font-size: clamp(42px, 5.5vw, 68px); font-weight: 300; margin-bottom: 80px; max-width: 1280px; margin-left: auto; margin-right: auto; padding: 0 clamp(20px, 6vw, 80px);">The Watchmaking Process</h2>
+    <div class="process-grid">
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">01</div>
+        <h3>Design & Engineering</h3>
+        <p>Every watch begins as a vision. Our designers sketch, refine, and engineer each timepiece with CAD precision, ensuring form and function achieve perfect harmony.</p>
+      </div>
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">02</div>
+        <h3>Material Selection</h3>
+        <p>We source only the finest materials from certified suppliers. Sapphire crystal, stainless steel, and precious metals are hand-selected for durability and beauty.</p>
+      </div>
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">03</div>
+        <h3>Case Crafting</h3>
+        <p>Each case is machined from a solid block of metal. Hours of CNC work are followed by hand-finishing to achieve the signature AUNA polish and brushing.</p>
+      </div>
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">04</div>
+        <h3>Movement Assembly</h3>
+        <p>Our master watchmakers assemble the movement by hand. Every gear, jewel, and spring is placed with millimeter precision. No shortcuts. No exceptions.</p>
+      </div>
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">05</div>
+        <h3>Dial Creation</h3>
+        <p>The dial is hand-painted and applied with precision. Each marker, text, and detail is positioned to exact specifications using traditional techniques.</p>
+      </div>
+      <div class="process-card reveal" data-observe="">
+        <div class="process-number">06</div>
+        <h3>Quality Control</h3>
+        <p>Every watch undergoes rigorous testing—accuracy, water resistance, durability. Only timepieces that exceed our standards leave the workshop.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="materials-section">
+    <div class="section-inner">
+      <h2 style="font-family: var(--serif); font-size: clamp(42px, 5.5vw, 68px); font-weight: 300; margin-bottom: 80px;">Materials of Excellence</h2>
+      <div class="materials-grid">
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">💎</div>
+          <h4>Sapphire Crystal</h4>
+          <p>Scratch-resistant, optically pure. Our sapphire crystal offers clarity and durability that lasts a lifetime.</p>
+        </div>
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">⚙️</div>
+          <h4>Swiss Movement</h4>
+          <p>Chronometer-certified automatic movement developed with Geneva's finest watchmakers for precision and longevity.</p>
+        </div>
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">🔗</div>
+          <h4>Surgical Steel</h4>
+          <p>316L stainless steel, hardened and polished. Resistant to corrosion, allergies, and the test of time.</p>
+        </div>
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">✨</div>
+          <h4>Precious Metals</h4>
+          <p>Select collections feature solid gold or platinum. Ethically sourced and certified by international standards.</p>
+        </div>
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">🌱</div>
+          <h4>Sustainable Leather</h4>
+          <p>Hand-stitched straps from tanneries with zero-waste practices. Natural, durable, and earth-conscious.</p>
+        </div>
+        <div class="material-item reveal" data-observe="">
+          <div class="material-icon">🎨</div>
+          <h4>Hand-Painted Dials</h4>
+          <p>Applied with traditional techniques, each dial is a unique work of art. No two watches are exactly alike.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> AUNA Watch Co.</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="collections.html">Collections</a>
+      <a href="craftsmanship.html">Craftsmanship</a>
+      <a href="contact.html">Contact</a>
+      <a href="#">Privacy</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const nav = document.getElementById('nav');
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const observed = document.querySelectorAll('[data-observe]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      observed.forEach(el => io.observe(el));
+    } else {
+      observed.forEach(el => el.classList.add('in'));
+    }
+  </script>
+</body>
+</html>
