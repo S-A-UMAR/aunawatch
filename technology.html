@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUNA Technology — Precision Engineering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAFAF8;
+      --bg-soft: #F3F0EB;
+      --bg-alt: #FFFFFF;
+      --text: #0F0D0A;
+      --text-dim: #4A4641;
+      --muted: #8B8278;
+      --accent: #C4956A;
+      --accent-light: #E8D4C0;
+      --accent-dark: #8B6F47;
+      --line: rgba(15,13,10,0.06);
+      --line-strong: rgba(15,13,10,0.12);
+      --serif: 'Fraunces', serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--accent); color: #fff; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #C9C1B0; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    a { color: inherit; text-decoration: none; transition: color .3s cubic-bezier(.2, .6, .2, 1); }
+    :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 4px; }
+
+    nav { position: fixed; top: 0; left: 0; width: 100%; display: flex;
+      align-items: center; justify-content: space-between; padding: 28px clamp(20px, 5vw, 64px);
+      z-index: 100; transition: all .5s cubic-bezier(.2, .6, .2, 1); border-bottom: 1px solid transparent;
+      background: rgba(250, 250, 248, 0.3); backdrop-filter: blur(0px); }
+    nav.scrolled { background: rgba(250, 250, 248, 0.85); backdrop-filter: blur(16px) saturate(150%);
+      padding: 18px clamp(20px, 5vw, 64px); border-bottom: 1px solid var(--line);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04); }
+
+    .wordmark { font-family: var(--serif); font-weight: 500; font-size: 19px; letter-spacing: 0.06em; }
+    .nav-right { display: flex; align-items: center; gap: 28px; }
+    .nav-links { display: flex; gap: 26px; font-size: 13px; color: var(--text-dim); }
+    .nav-links a { text-decoration: none; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+      background: var(--accent); transition: width .35s ease; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--text); }
+
+    .btn { font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: #fff;
+      background: var(--accent); border: 1.5px solid var(--accent); padding: 12px 28px; border-radius: 6px;
+      cursor: pointer; text-decoration: none; position: relative; overflow: hidden;
+      transition: all .35s cubic-bezier(.2, .6, .2, 1); display: inline-flex; align-items: center; gap: 8px; }
+    .btn::before { content: ''; position: absolute; inset: 0; background: var(--accent-dark);
+      transform: translateX(-102%); transition: transform .4s cubic-bezier(.65, 0, .35, 1); z-index: 0; }
+    .btn span { position: relative; z-index: 1; }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(196, 149, 106, 0.25); }
+
+    section { position: relative; padding: 0 clamp(20px, 6vw, 80px); z-index: 10; }
+    .section-inner { max-width: 1280px; margin: 0 auto; min-height: 100vh; display: flex;
+      flex-direction: column; justify-content: center; padding: 160px 0; }
+
+    .hero-section { padding-top: 180px; padding-bottom: 100px; }
+    .hero-section h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(52px, 8vw, 100px);
+      line-height: 1.08; letter-spacing: -0.015em; margin-bottom: 24px; text-balance: pretty; }
+    .hero-section p { font-size: 18px; line-height: 1.75; color: var(--text-dim); max-width: 600px; }
+
+    .specs-section { padding: 100px 0; background: var(--bg-alt); }
+    .specs-grid { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 80px);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; }
+
+    .spec-card { padding: 45px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg);
+      transition: all .4s cubic-bezier(.2, .6, .2, 1); }
+    .spec-card:hover { border-color: var(--accent); box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+      transform: translateY(-6px); }
+
+    .spec-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+    .spec-card h3 { font-family: var(--serif); font-size: 28px; font-weight: 400; margin-bottom: 6px; }
+    .spec-card p { color: var(--text-dim); line-height: 1.6; font-size: 14px; }
+
+    .details-section { padding: 100px 0; }
+    .details-table { max-width: 1000px; margin: 0 auto; width: 100%; border-collapse: collapse; }
+    .details-table td { padding: 18px 20px; border-bottom: 1px solid var(--line); }
+    .details-table td:first-child { font-weight: 500; color: var(--text); width: 40%; }
+    .details-table td:nth-child(2) { color: var(--text-dim); }
+
+    .certifications { padding: 60px 0; background: var(--bg-soft); }
+    .cert-grid { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 80px);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+
+    .cert-item { padding: 30px; text-align: center; background: var(--bg); border-radius: 12px; border: 1px solid var(--line); }
+    .cert-icon { font-size: 48px; margin-bottom: 12px; }
+    .cert-item h4 { font-family: var(--serif); font-size: 18px; font-weight: 400; margin-bottom: 6px; }
+    .cert-item p { font-size: 13px; color: var(--muted); }
+
+    .reveal { opacity: 0; transform: translateY(32px);
+      transition: opacity 1s cubic-bezier(.2, .6, .2, 1), transform 1s cubic-bezier(.2, .6, .2, 1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    footer { border-top: 1px solid var(--line); padding: 48px clamp(20px, 6vw, 80px) 54px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+      gap: 16px; font-size: 13px; color: var(--muted); background: var(--bg-alt); }
+    footer a { transition: color .3s ease; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 28px; }
+
+    .hamburger-btn { display: none; flex-direction: column; gap: 6px; background: transparent; border: none;
+      cursor: pointer; padding: 8px; z-index: 200; }
+    .hamburger-btn span { width: 28px; height: 2px; background: var(--text); transition: all 0.3s ease; }
+    .hamburger-btn.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+    .hamburger-btn.active span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        position: fixed; top: 0; right: 0; width: 75%; height: 100vh; background: var(--bg);
+        flex-direction: column; padding: 100px 40px; gap: 36px; transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(.2, .6, .2, 1); border-left: 1px solid var(--line); z-index: 150;
+      }
+      .nav-links.active { transform: translateX(0); }
+      .hamburger-btn { display: flex; }
+      .btn { display: none; }
+      .details-table td { padding: 12px; font-size: 13px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <a href="index.html" class="wordmark">AUNA</a>
+    <div class="nav-right">
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="collections.html">Collections</a>
+        <a href="heritage.html">Heritage</a>
+        <a href="craftsmanship.html">Craftsmanship</a>
+        <a href="technology.html">Technology</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger-btn" id="hamburger"><span></span><span></span><span></span></button>
+      <a href="collections.html" class="btn preorder-btn"><span>Shop</span></a>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="section-inner">
+      <h1 class="reveal" data-observe="">Precision Engineered</h1>
+      <p class="reveal" data-observe="">Behind every AUNA watch is decades of horological expertise. Our movements are chronometer-certified and tested to exceed international standards. This is precision that you can trust.</p>
+    </div>
+  </section>
+
+  <section class="specs-section">
+    <h2 style="text-align: center; font-family: var(--serif); font-size: clamp(42px, 5.5vw, 68px); font-weight: 300; margin-bottom: 80px; max-width: 1280px; margin-left: auto; margin-right: auto; padding: 0 clamp(20px, 6vw, 80px);">Key Specifications</h2>
+    <div class="specs-grid">
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Movement</div>
+        <h3>Automatic</h3>
+        <p>Swiss-made, self-winding movement with 38-hour power reserve. Chronometer-certified for accuracy within -4 to +6 seconds per day.</p>
+      </div>
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Water Resistance</div>
+        <h3>100m / 330ft</h3>
+        <p>Suitable for swimming and snorkeling. Tested to withstand pressure equivalent to 10 times atmospheric pressure at sea level.</p>
+      </div>
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Crystal</div>
+        <h3>Sapphire</h3>
+        <p>Optically pure and scratch-resistant. Treated with anti-reflective coating for superior readability and clarity in all lighting conditions.</p>
+      </div>
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Case Diameter</div>
+        <h3>40mm</h3>
+        <p>Professional size that suits most wrist sizes. Precisely engineered case with integrated lugs for optimal strap compatibility.</p>
+      </div>
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Case Material</div>
+        <h3>Stainless Steel</h3>
+        <p>316L surgical-grade steel. Highly resistant to corrosion and everyday wear. Polished and brushed finishing techniques applied.</p>
+      </div>
+      <div class="spec-card reveal" data-observe="">
+        <div class="spec-label">Weight</div>
+        <h3>120g</h3>
+        <p>Balanced weight for comfort during extended wear. Optimized case geometry prevents unnecessary bulk while maintaining durability.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="details-section">
+    <div class="section-inner">
+      <h2 style="font-family: var(--serif); font-size: clamp(42px, 5.5vw, 68px); font-weight: 300; margin-bottom: 60px;">Complete Specifications</h2>
+      <table class="details-table">
+        <tr>
+          <td>Jewels</td>
+          <td>25 (shock-resistant)</td>
+        </tr>
+        <tr>
+          <td>Frequencies</td>
+          <td>28,800 vibrations/hour (4Hz)</td>
+        </tr>
+        <tr>
+          <td>Power Reserve</td>
+          <td>38 hours minimum</td>
+        </tr>
+        <tr>
+          <td>Screw-Down Crown</td>
+          <td>Yes, for enhanced water resistance</td>
+        </tr>
+        <tr>
+          <td>Mineral Dial Markers</td>
+          <td>Applied indices with lume for night visibility</td>
+        </tr>
+        <tr>
+          <td>Hands</td>
+          <td>Luminous, blue steel with polished bevels</td>
+        </tr>
+        <tr>
+          <td>Strap Options</td>
+          <td>Leather, rubber, or stainless steel bracelet</td>
+        </tr>
+        <tr>
+          <td>Thickness</td>
+          <td>10.8mm (exceptionally slim profile)</td>
+        </tr>
+        <tr>
+          <td>Lug-to-Lug Distance</td>
+          <td>48.5mm for versatile sizing</td>
+        </tr>
+        <tr>
+          <td>Warranty</td>
+          <td>2 years international coverage</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="certifications">
+    <div class="section-inner">
+      <h2 style="text-align: center; font-family: var(--serif); font-size: clamp(42px, 5.5vw, 68px); font-weight: 300; margin-bottom: 80px;">Certifications & Standards</h2>
+      <div class="cert-grid">
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">✓</div>
+          <h4>Chronometer Certified</h4>
+          <p>COSC certified movement meeting international accuracy standards</p>
+        </div>
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">⚡</div>
+          <h4>ISO 6425</h4>
+          <p>Professional dive watch standard for water resistance and reliability</p>
+        </div>
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">🌍</div>
+          <h4>RoHS Compliant</h4>
+          <p>Restricted Hazardous Substances directive compliance for safety</p>
+        </div>
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">🏭</div>
+          <h4>ISO 9001</h4>
+          <p>Quality management system certification for consistent excellence</p>
+        </div>
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">♻️</div>
+          <h4>Sustainable Materials</h4>
+          <p>Certified ethical sourcing and responsible manufacturing practices</p>
+        </div>
+        <div class="cert-item reveal" data-observe="">
+          <div class="cert-icon">🔬</div>
+          <h4>Lab Tested</h4>
+          <p>Rigorous third-party testing for durability and performance validation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> AUNA Watch Co.</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="collections.html">Collections</a>
+      <a href="technology.html">Technology</a>
+      <a href="contact.html">Contact</a>
+      <a href="#">Privacy</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const nav = document.getElementById('nav');
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const observed = document.querySelectorAll('[data-observe]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      observed.forEach(el => io.observe(el));
+    } else {
+      observed.forEach(el => el.classList.add('in'));
+    }
+  </script>
+</body>
+</html>
